@@ -321,9 +321,14 @@ export class RecordingDelegate implements CameraRecordingDelegate {
       }
     }
 
-    // Get input configuration
+    // Get input configuration  
     const ffmpegInput: Array<string> = []
     if (this.videoConfig?.prebuffer) {
+      // Ensure prebuffer is initialized
+      if (!this.preBuffer) {
+        await this.startPreBuffer()
+      }
+      
       const input: Array<string> = this.preBuffer ? 
         await this.preBuffer.getVideo(configuration.mediaContainerConfiguration.fragmentLength ?? PREBUFFER_LENGTH) : []
       ffmpegInput.push(...input)
